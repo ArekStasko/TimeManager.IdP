@@ -16,6 +16,11 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
             {
                 Tuple<byte[], byte[]> hash = CreatePasswordHash(data.Password);
 
+                if(_context.Users.SingleOrDefault(u => u.UserName == data.UserName, null) != null)
+                {
+                    throw new Exception("User with this username already exists");
+                }
+
                 User user = new User(data.UserName, hash.Item1, hash.Item2);
                 _context.Users.Add(user);
                 _context.SaveChanges();

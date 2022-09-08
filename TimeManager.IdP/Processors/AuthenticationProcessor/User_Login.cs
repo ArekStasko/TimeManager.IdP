@@ -15,16 +15,28 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
             {
                 var user_token = new User_Token(_context);
                 var user = _context.Users.FirstOrDefault(u => u.UserName == data.UserName);
+                Token token = null;
 
-                if (VerifyPasswordHash(data.Password, user))
+                if (!VerifyPasswordHash(data.Password, user))
                 {
+                    throw new Exception("Wrong Password or Username");    
+                }
 
-                    Token token = user_token.CreateToken(user);
+                if (_context.Tokens.SingleOrDefault(u => u.Id == user.Id, null) != null)
+                {
+                    token = _context.Tokens.Single(u => u.Id == user.Id);
+                }
+
+                if (user_token.CheckExpirationDate(token))
+                {
                     response = new Response<Token>(token);
                     return response;
                 }
 
-                throw new Exception("User not found !");
+                token = user_token.CreateToken(user);
+                response = new Response<Token>(token);
+                return response;
+
             }
             catch (Exception ex)
             {
