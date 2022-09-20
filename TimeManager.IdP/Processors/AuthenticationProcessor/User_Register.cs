@@ -8,7 +8,7 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 {
     public class User_Register : Processor
     {
-        public User_Register(DataContext context) : base(context) { }
+        public User_Register(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
         public Response<Token> Register(UserDTO data)
         {
             Response<Token> response;
@@ -25,15 +25,17 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
-                var user_token = new User_Token(_context);
+                var user_token = new User_Token(_context, _logger);
 
                 Token token = user_token.CreateToken(user);
                 response = new Response<Token>(token);
 
+                _logger.LogInformation("Successfully registered user");
                 return response;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 response = new Response<Token>(ex, "Whoops something went wrong");
                 return response;
             }
@@ -41,16 +43,24 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 
         private Tuple<byte[], byte[]> CreatePasswordHash(string password)
         {
-            byte[] passwordSalt;
-            byte[] passwordHash;
-
-            using (var hmac = new HMACSHA512())
+            try
             {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+                byte[] passwordSalt;
+                byte[] passwordHash;
 
-            return new Tuple<byte[], byte[]>(passwordHash, passwordSalt);
+                using (var hmac = new HMACSHA512())
+                {
+                    passwordSalt = hmac.Key;
+                    passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                }
+
+                return new Tuple<byte[], byte[]>(passwordHash, passwordSalt);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

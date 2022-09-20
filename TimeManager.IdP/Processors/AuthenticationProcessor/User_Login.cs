@@ -7,13 +7,13 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 {
     public class User_Login : Processor
     {
-        public User_Login(DataContext context) : base(context) { }
+        public User_Login(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
         public Response<Token> Login(UserDTO data)
         {
             Response<Token> response;
             try
             {
-                var user_token = new User_Token(_context);
+                var user_token = new User_Token(_context, _logger);
                 var user = _context.Users.FirstOrDefault(u => u.UserName == data.UserName);
                 Token token = null;
 
@@ -35,11 +35,13 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 
                 token = user_token.CreateToken(user);
                 response = new Response<Token>(token);
+                _logger.LogInformation("User successfully logged in");
                 return response;
 
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 response = new Response<Token>(ex, "Whoops something went wrong");
                 return response;
             }
