@@ -15,7 +15,7 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
             {
                 var user_token = new User_Token(_context, _logger);
 
-                if (_context.Tokens.SingleOrDefault(t => t.token == data.token, null) == null || !user_token.CheckExpirationDate(data))
+                if (!_context.Tokens.Any(t => t.token == data.token) || !user_token.CheckExpirationDate(data))
                 {
                     throw new Exception("User is not authenticated");
                 }

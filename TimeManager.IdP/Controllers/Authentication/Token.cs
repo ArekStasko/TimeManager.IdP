@@ -18,6 +18,17 @@ namespace TimeManager.IdP.Authentication
         public DateTime expirationDate { get; set; }
         public int userId { get; set; }
 
+
+        public override bool Equals(object? obj)
+        {
+            if(obj == null || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+
+            Token other = obj as Token;
+            return token == other.token;
+        }
     }
 
     public class TokenKey

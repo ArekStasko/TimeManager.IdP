@@ -14,18 +14,21 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
             Response<Token> response;
             try
             {
+                _logger.LogInformation("Register Processor invoked");
                 Tuple<byte[], byte[]> hash = CreatePasswordHash(data.Password);
 
-                if(_context.Users.SingleOrDefault(u => u.UserName == data.UserName, null) != null)
+                if(_context.Users.Any(u => u.UserName == data.UserName))
                 {
                     throw new Exception("User with this username already exists");
                 }
+                _logger.LogInformation($"Username: {data.UserName}  Is free");
 
                 User user = new User(data.UserName, hash.Item1, hash.Item2);
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
                 var user_token = new User_Token(_context, _logger);
+                _logger.LogInformation("Token is created");
 
                 Token token = user_token.CreateToken(user);
                 response = new Response<Token>(token);
