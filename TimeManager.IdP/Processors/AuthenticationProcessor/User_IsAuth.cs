@@ -7,13 +7,13 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 {
     public class User_IsAuth : Processor
     {
-        public User_IsAuth(DataContext _context, ILogger<AuthController> logger) : base(_context, logger) {}
+        public User_IsAuth(DataContext _context, ILogger<TokenController> logger) : base(_context, logger) {}
         public Response<bool> IsAuthorised(Token data)
         {
             Response<bool> response;
             try
             {
-                var user_token = new User_Token(_context, _logger);
+                var user_token = new Token_Generate(_context, _logger);
 
                 if (!_context.Tokens.Any(t => t.token == data.token) || !user_token.CheckExpirationDate(data))
                 {

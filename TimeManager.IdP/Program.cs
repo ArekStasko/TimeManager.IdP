@@ -2,6 +2,8 @@ using TimeManager.IdP.Data;
 using TimeManager.IdP.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+
 
 builder.Services.AddDbContext<DataContext>(options =>
 {

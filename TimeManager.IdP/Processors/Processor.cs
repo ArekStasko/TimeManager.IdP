@@ -6,9 +6,9 @@ namespace TimeManager.IdP.Processors
     public class Processor
     {
         protected readonly DataContext _context;
-        protected readonly ILogger<AuthController> _logger;
+        protected readonly ILogger<TokenController> _logger;
 
-        public Processor(DataContext context, ILogger<AuthController> logger)
+        public Processor(DataContext context, ILogger<TokenController> logger)
         {
             _context = context;
             _logger = logger;

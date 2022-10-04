@@ -7,13 +7,13 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 {
     public class User_Login : Processor
     {
-        public User_Login(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
+        public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
         public Response<Token> Login(UserDTO data)
         {
             Response<Token> response;
             try
             {
-                var user_token = new User_Token(_context, _logger);
+                var user_token = new Token_Generate(_context, _logger);
                 var user = _context.Users.FirstOrDefault(u => u.UserName == data.UserName);
                 Token token = null;
 

@@ -11,9 +11,9 @@ namespace TimeManager.IdP.Authentication
     public class AuthController : ControllerBase, IAuthController
     {
         private readonly DataContext _context;
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<TokenController> _logger;
 
-        public AuthController(DataContext context, ILogger<AuthController> logger)
+        public AuthController(DataContext context, ILogger<TokenController> logger)
         {
             _context = context;
             _logger = logger;
@@ -34,15 +34,5 @@ namespace TimeManager.IdP.Authentication
             var User = login.Login(request);            
             return Ok(User);
         }
-
-        [HttpPost("isauth")]
-        public async Task<ActionResult<Response<string>>> IsAuth(Token request)
-        {
-            User_IsAuth IsAuth = new User_IsAuth(_context, _logger);
-            var User = IsAuth.IsAuthorised(request);
-            return Ok(User);
-        }
-
-
     }
 }

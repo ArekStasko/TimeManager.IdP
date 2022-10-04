@@ -5,8 +5,6 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeManager.IdP", "TimeManager.IdP\TimeManager.IdP.csproj", "{37D256D6-D4FA-48C0-8A97-15533E23C6CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeManager.IdP.Tests", "TimeManager.IdP.Tests\TimeManager.IdP.Tests.csproj", "{C3C53CC3-7894-4BD8-9784-A4B862B25A67}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{37D256D6-D4FA-48C0-8A97-15533E23C6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D256D6-D4FA-48C0-8A97-15533E23C6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D256D6-D4FA-48C0-8A97-15533E23C6CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3C53CC3-7894-4BD8-9784-A4B862B25A67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3C53CC3-7894-4BD8-9784-A4B862B25A67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3C53CC3-7894-4BD8-9784-A4B862B25A67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3C53CC3-7894-4BD8-9784-A4B862B25A67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,7 +8,7 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
 {
     public class User_Register : Processor
     {
-        public User_Register(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
+        public User_Register(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
         public Response<Token> Register(UserDTO data)
         {
             Response<Token> response;
@@ -27,7 +27,7 @@ namespace TimeManager.IdP.Processors.AuthenticationProcessor
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
-                var user_token = new User_Token(_context, _logger);
+                var user_token = new Token_Generate(_context, _logger);
                 _logger.LogInformation("Token is created");
 
                 Token token = user_token.CreateToken(user);
