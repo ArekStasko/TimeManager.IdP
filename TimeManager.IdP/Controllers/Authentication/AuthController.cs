@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
-using TimeManager.IdP.Processors.AuthenticationProcessor;
+using TimeManager.IdP.Processors.TokenProcessor;
 
 namespace TimeManager.IdP.Authentication
 {

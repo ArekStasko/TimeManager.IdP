@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using TimeManager.IdP.Authentication;
 
 
-namespace TimeManager.IdP.Processors.AuthenticationProcessor
+namespace TimeManager.IdP.Processors.TokenProcessor
 {
     public class User_Register : Processor
     {

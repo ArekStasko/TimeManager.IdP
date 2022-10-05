@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
-using TimeManager.IdP.Processors.AuthenticationProcessor;
+using TimeManager.IdP.Processors.TokenProcessor;
 
 namespace TimeManager.IdP.Authentication
 {
@@ -19,14 +19,20 @@ namespace TimeManager.IdP.Authentication
             _logger = logger;
         }
 
-        [HttpPost("token")]
-        public async Task<ActionResult<Response<string>>> IsAuth(Token request)
+        [HttpPost("generateToken")]
+        public async Task<ActionResult<Response<string>>> GenerateToken(Token request)
         {
             User_IsAuth IsAuth = new User_IsAuth(_context, _logger);
             var User = IsAuth.IsAuthorised(request);
             return Ok(User);
         }
 
-
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<Response<string>>> RefreshToken(Token request)
+        {
+            User_IsAuth IsAuth = new User_IsAuth(_context, _logger);
+            var User = IsAuth.IsAuthorised(request);
+            return Ok(User);
+        }
     }
 }

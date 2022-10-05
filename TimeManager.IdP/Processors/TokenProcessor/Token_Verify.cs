@@ -10,7 +10,7 @@ using JWT.Exceptions;
 using JWT.Serializers;
 using System.Text;
 
-namespace TimeManager.IdP.Processors.AuthenticationProcessor
+namespace TimeManager.IdP.Processors.TokenProcessor
 {
     public class Token_Verify : Processor
     {
