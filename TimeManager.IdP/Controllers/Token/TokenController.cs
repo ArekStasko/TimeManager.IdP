@@ -20,19 +20,19 @@ namespace TimeManager.IdP.Authentication
         }
 
         [HttpPost("generateToken")]
-        public async Task<ActionResult<Response<string>>> GenerateToken(Token request)
+        public async Task<ActionResult<Response<string>>> GenerateToken(User user)
         {
-            User_IsAuth IsAuth = new User_IsAuth(_context, _logger);
-            var User = IsAuth.IsAuthorised(request);
-            return Ok(User);
+            Token_Generate generateToken = new Token_Generate(_context, _logger);
+            string token = generateToken.GenerateToken(user);
+            return Ok(token);
         }
 
         [HttpPost("refreshToken")]
-        public async Task<ActionResult<Response<string>>> RefreshToken(Token request)
+        public async Task<ActionResult<Response<string>>> RefreshToken(User user)
         {
-            User_IsAuth IsAuth = new User_IsAuth(_context, _logger);
-            var User = IsAuth.IsAuthorised(request);
-            return Ok(User);
+            RefreshToken_Generate refreshToken = new RefreshToken_Generate(_context, _logger);
+            (string key, string jwt) token = refreshToken.GenerateRefreshToken(user);
+            return Ok(token.jwt);
         }
     }
 }

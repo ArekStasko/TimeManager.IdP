@@ -8,19 +8,18 @@ namespace TimeManager.IdP.Processors.TokenProcessor
     public class User_Login : Processor
     {
         public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<Token> Login(UserDTO data)
+        public Response<string> Login(UserDTO data)
         {
-            Response<Token> response;
+            Response<string> response;
             try
             {
-                var user_token = new Token_Generate(_context, _logger);
-                var user = _context.Users.FirstOrDefault(u => u.UserName == data.UserName);
-                Token token = null;
+                var generateToken = new Token_Generate(_context, _logger);
 
-                if (!VerifyPasswordHash(data.Password, user))
-                {
-                    throw new Exception("Wrong Password or Username");    
-                }
+                var user = _context.Users.First(u => u.UserName == data.UserName);
+
+                if (user == null) throw new Exception($"There is no user with {data.UserName} Username");
+
+                if (!VerifyPasswordHash(data.Password, user)) throw new Exception("Wrong Password or Username");    
 
                 if (_context.Tokens.SingleOrDefault(u => u.Id == user.Id, null) != null)
                 {
