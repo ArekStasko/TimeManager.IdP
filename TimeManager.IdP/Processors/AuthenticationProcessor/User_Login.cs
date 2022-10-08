@@ -21,19 +21,9 @@ namespace TimeManager.IdP.Processors.TokenProcessor
 
                 if (!VerifyPasswordHash(data.Password, user)) throw new Exception("Wrong Password or Username");    
 
-                if (_context.Tokens.SingleOrDefault(u => u.Id == user.Id, null) != null)
-                {
-                    token = _context.Tokens.Single(u => u.Id == user.Id);
-                }
 
-                if (user_token.CheckExpirationDate(token))
-                {
-                    response = new Response<Token>(token);
-                    return response;
-                }
-
-                token = user_token.CreateToken(user);
-                response = new Response<Token>(token);
+                string token = generateToken.GenerateToken(user);
+                response = new Response<string>(token);
                 _logger.LogInformation("User successfully logged in");
                 return response;
 
@@ -41,7 +31,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                response = new Response<Token>(ex, "Whoops something went wrong");
+                response = new Response<string>(ex, "Whoops something went wrong");
                 return response;
             }
         }
