@@ -23,6 +23,10 @@ namespace TimeManager.IdP.Processors.TokenProcessor
 
 
                 string token = generateToken.GenerateToken(user);
+
+                user.Token = token;
+                _context.SaveChanges();
+
                 response = new Response<string>(token);
                 _logger.LogInformation("User successfully logged in");
                 return response;

@@ -20,12 +20,17 @@ namespace TimeManager.IdP.Processors.TokenProcessor
         {
             try
             {
+                /*
                 var result = new JwtBuilder()
-                    .WithSecret(_context.TokenKey.First().ToString())
+                    .WithSecret(_context.TokenKey.First().ToString())                    
                     .MustVerifySignature()
                     .Decode<IDictionary<string, object>>(token);
+                */
 
-                var user = _context.Users.Where(u => u.UserName == result["username"]);
+                var handler = new JwtSecurityTokenHandler();
+                var tokenResult = handler.ReadJwtToken(token);
+
+                var user = _context.Users.Where(u => u.UserName == tokenResult.Claims);
 
                 if (!user.Any())
                 {

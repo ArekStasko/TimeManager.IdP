@@ -16,7 +16,7 @@ namespace TimeManager.IdP.Data
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string Token { get; set; }
-        public string RefreshTokens { get; set; }
+        public string? RefreshTokens { get; set; }
 
     }
 }

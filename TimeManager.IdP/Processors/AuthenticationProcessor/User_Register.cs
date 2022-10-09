@@ -25,12 +25,16 @@ namespace TimeManager.IdP.Processors.TokenProcessor
 
                 User user = new User(data.UserName, hash.Item1, hash.Item2);
                 _context.Users.Add(user);
-                _context.SaveChanges();
+                
 
                 var generateToken = new Token_Generate(_context, _logger);
-                _logger.LogInformation("Token is created");
 
                 string token = generateToken.GenerateToken(user);
+                _logger.LogInformation("Token is created");
+
+                user.Token = token;
+                _context.SaveChanges();
+
                 response = new Response<string>(token);
 
                 _logger.LogInformation("Successfully registered user");

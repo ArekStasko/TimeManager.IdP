@@ -19,20 +19,20 @@ namespace TimeManager.IdP.Authentication
             _logger = logger;
         }
 
-        [HttpPost("generateToken")]
-        public async Task<ActionResult<Response<string>>> GenerateToken(User user)
-        {
-            Token_Generate generateToken = new Token_Generate(_context, _logger);
-            string token = generateToken.GenerateToken(user);
-            return Ok(token);
-        }
-
         [HttpPost("refreshToken")]
         public async Task<ActionResult<Response<string>>> RefreshToken(User user)
         {
             RefreshToken_Generate refreshToken = new RefreshToken_Generate(_context, _logger);
             (string key, string jwt) token = refreshToken.GenerateRefreshToken(user);
             return Ok(token.jwt);
+        }
+
+        [HttpPost("verifyToken")]
+        public async Task<ActionResult<Response<string>>> RefreshToken(string token)
+        {
+            Token_Verify verifyToken = new Token_Verify(_context, _logger);
+            int userId = verifyToken.VerifyToken(token);
+            return Ok(userId);
         }
     }
 }
