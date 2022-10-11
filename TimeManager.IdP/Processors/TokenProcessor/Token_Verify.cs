@@ -16,21 +16,20 @@ namespace TimeManager.IdP.Processors.TokenProcessor
     {
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 
+ 
         public int VerifyToken(string token)
         {
             try
             {
-                /*
-                var result = new JwtBuilder()
-                    .WithSecret(_context.TokenKey.First().ToString())                    
-                    .MustVerifySignature()
-                    .Decode<IDictionary<string, object>>(token);
-                */
-
                 var handler = new JwtSecurityTokenHandler();
+
+                handler.ValidateToken(token);
+
                 var tokenResult = handler.ReadJwtToken(token);
 
-                var user = _context.Users.Where(u => u.UserName == tokenResult.Claims);
+                var claims = tokenResult.Claims.ToList().Where(claim => claim.Type == "Username").First();
+
+                var user = _context.Users.Where(u => u.UserName == claims.Value);
 
                 if (!user.Any())
                 {
@@ -47,6 +46,5 @@ namespace TimeManager.IdP.Processors.TokenProcessor
             }
             
         }                                                     
-
     }
 }

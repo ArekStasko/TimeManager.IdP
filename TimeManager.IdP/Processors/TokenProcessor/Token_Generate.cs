@@ -20,14 +20,23 @@ namespace TimeManager.IdP.Processors.TokenProcessor
         {
             try
             {
-                string token = new JwtBuilder()
-                     .WithAlgorithm(new HMACSHA256Algorithm())
-                     .WithSecret(Encoding.ASCII.GetBytes(_context.TokenKey.First().ToString()))
-                     .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(10).ToUnixTimeSeconds())
-                     .AddClaim("username", user.UserName)
-                     .Encode();
-                    
-                return token;
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_context.TokenKey.First().ToString()));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new[]
+                {
+                    new Claim("Username", user.UserName),
+                };
+
+                var token = new JwtSecurityToken(
+                    null, 
+                    null, 
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(30),
+                    signingCredentials: credentials
+                    );
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
             } 
             catch (Exception ex)
             {

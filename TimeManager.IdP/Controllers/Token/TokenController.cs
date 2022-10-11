@@ -19,16 +19,8 @@ namespace TimeManager.IdP.Authentication
             _logger = logger;
         }
 
-        [HttpPost("refreshToken")]
-        public async Task<ActionResult<Response<string>>> RefreshToken(User user)
-        {
-            RefreshToken_Generate refreshToken = new RefreshToken_Generate(_context, _logger);
-            (string key, string jwt) token = refreshToken.GenerateRefreshToken(user);
-            return Ok(token.jwt);
-        }
-
         [HttpPost("verifyToken")]
-        public async Task<ActionResult<Response<string>>> RefreshToken(string token)
+        public async Task<ActionResult<Response<string>>> VerifyToken(string token)
         {
             Token_Verify verifyToken = new Token_Verify(_context, _logger);
             int userId = verifyToken.VerifyToken(token);
