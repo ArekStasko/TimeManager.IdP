@@ -23,10 +23,17 @@ namespace TimeManager.IdP.Processors.TokenProcessor
             {
                 var handler = new JwtSecurityTokenHandler();
 
-                handler.ValidateToken(token);
+                handler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_context.TokenKey.First().ToString())),
+                }, out _);
 
                 var tokenResult = handler.ReadJwtToken(token);
-
+  
                 var claims = tokenResult.Claims.ToList().Where(claim => claim.Type == "Username").First();
 
                 var user = _context.Users.Where(u => u.UserName == claims.Value);
