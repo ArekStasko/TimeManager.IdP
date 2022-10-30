@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
 using TimeManager.IdP.Processors.TokenProcessor;
+using TimeManager.IdP.Data.Token;
 
 namespace TimeManager.IdP.Authentication
 {
@@ -20,11 +21,20 @@ namespace TimeManager.IdP.Authentication
         }
 
         [HttpPost("verifyToken")]
-        public async Task<ActionResult<Response<string>>> VerifyToken(string token)
+        public async Task<ActionResult<Response<string>>> VerifyToken(TokenDTO tokenDTO)
         {
-            Token_Verify verifyToken = new Token_Verify(_context, _logger);
-            int userId = verifyToken.VerifyToken(token);
-            return Ok(userId);
+            try
+            {
+                Token_Verify verifyToken = new Token_Verify(_context, _logger);
+                int userId = verifyToken.VerifyToken(tokenDTO.token);
+
+                return Ok(new Response<int>(userId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PROCESS FAILED: {ex.Message}  || TOKEN: {tokenDTO.token}");
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
