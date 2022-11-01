@@ -4,6 +4,7 @@ using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
 using TimeManager.IdP.Processors.TokenProcessor;
 using Microsoft.AspNetCore.Authorization;
+using TimeManager.IdP.Data.Token;
 
 namespace TimeManager.IdP.Authentication
 {
@@ -22,20 +23,20 @@ namespace TimeManager.IdP.Authentication
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<Response<User>>> Register(UserDTO request)
+        public async Task<ActionResult<Response<TokenDTO>>> Register(UserDTO request)
         {
             User_Register register = new User_Register(_context, _logger);
-            var User = register.Register(request);
-            return Ok(User);
+            Response<TokenDTO> token = register.Register(request);
+            return Ok(token);
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<Response<string>>> Login(UserDTO request)
+        public async Task<ActionResult<Response<TokenDTO>>> Login(UserDTO request)
         {
             User_Login login = new User_Login(_context, _logger);
-            var User = login.Login(request);            
-            return Ok(User);
+            Response<TokenDTO> token = login.Login(request);            
+            return Ok(token);
         }
     }
 }

@@ -21,14 +21,14 @@ namespace TimeManager.IdP.Authentication
         }
 
         [HttpPost("verifyToken")]
-        public async Task<ActionResult<Response<string>>> VerifyToken(TokenDTO tokenDTO)
+        public async Task<ActionResult<Response<bool>>> VerifyToken(TokenDTO tokenDTO)
         {
             try
             {
                 Token_Verify verifyToken = new Token_Verify(_context, _logger);
-                int userId = verifyToken.VerifyToken(tokenDTO.token);
+                bool userId = verifyToken.VerifyToken(tokenDTO.token);
 
-                return Ok(new Response<int>(userId));
+                return Ok(new Response<bool>(userId));
             }
             catch (Exception ex)
             {

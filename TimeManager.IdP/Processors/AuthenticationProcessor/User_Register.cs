@@ -2,16 +2,16 @@
 using TimeManager.IdP.Data;
 using System.Security.Cryptography;
 using TimeManager.IdP.Authentication;
-
+using TimeManager.IdP.Data.Token;
 
 namespace TimeManager.IdP.Processors.TokenProcessor
 {
     public class User_Register : Processor
     {
         public User_Register(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<string> Register(UserDTO data)
+        public Response<TokenDTO> Register(UserDTO data)
         {
-            Response<string> response;
+            Response<TokenDTO> response;
             try
             {
                 _logger.LogInformation("Register Processor invoked");
@@ -35,7 +35,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
                 user.Token = token;
                 _context.SaveChanges();
 
-                response = new Response<string>(token);
+                response = new Response<TokenDTO>(new TokenDTO() { token = token, userId = user.Id });
 
                 _logger.LogInformation("Successfully registered user");
                 return response;
@@ -43,7 +43,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                response = new Response<string>(ex, "Whoops something went wrong");
+                response = new Response<TokenDTO>(ex, "Whoops something went wrong");
                 return response;
             }
         }

@@ -17,7 +17,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 
  
-        public int VerifyToken(string token)
+        public bool VerifyToken(string token)
         {
             try
             {
@@ -41,15 +41,15 @@ namespace TimeManager.IdP.Processors.TokenProcessor
                 if (!user.Any())
                 {
                     _logger.LogError("Verify Token failed");
-                    throw new Exception("There is no user");
+                    throw new Exception("There is no user for this token");
                 }
 
-                return user.First().Id;
+                return true;
             } 
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw ex;
+                return false;
             }
             
         }                                                     
