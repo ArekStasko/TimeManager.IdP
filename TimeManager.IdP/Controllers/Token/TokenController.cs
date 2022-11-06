@@ -4,6 +4,7 @@ using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
 using TimeManager.IdP.Processors.TokenProcessor;
 using TimeManager.IdP.Data.Token;
+using TimeManager.IdP.services;
 
 namespace TimeManager.IdP.Authentication
 {
@@ -11,28 +12,18 @@ namespace TimeManager.IdP.Authentication
     [ApiController]
     public class TokenController : ControllerBase, ITokenController
     {
-        private readonly DataContext _context;
-        private readonly ILogger<TokenController> _logger;
-
-        public TokenController(DataContext context, ILogger<TokenController> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
+        private readonly ITokenProcessors _processors;
+        public TokenController(ITokenProcessors processors) => _processors = processors;
 
         [HttpPost("verifyToken")]
         public async Task<ActionResult<Response<bool>>> VerifyToken(TokenDTO tokenDTO)
         {
             try
             {
-                Token_Verify verifyToken = new Token_Verify(_context, _logger);
-                bool userId = verifyToken.VerifyToken(tokenDTO.token);
-
-                return Ok(new Response<bool>(userId));
+                return Ok(_processors.VerifyToken(tokenDTO));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"PROCESS FAILED: {ex.Message}  || TOKEN: {tokenDTO.token}");
                 return BadRequest(ex.Message);
             }
         }
