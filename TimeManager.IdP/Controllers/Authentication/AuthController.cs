@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
-using TimeManager.IdP.Processors.TokenProcessor;
+using TimeManager.IdP.Processors.UserProcessor;
 using Microsoft.AspNetCore.Authorization;
 using TimeManager.IdP.Data.Token;
 

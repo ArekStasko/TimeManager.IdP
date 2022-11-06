@@ -1,18 +1,12 @@
-﻿using System.Security.Cryptography;
-using TimeManager.IdP.Data;
+﻿using TimeManager.IdP.Data;
 using TimeManager.IdP.Authentication;
-using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using JWT.Builder;
-using JWT.Algorithms;
-using JWT.Exceptions;
-using JWT.Serializers;
 using System.Text;
 
 namespace TimeManager.IdP.Processors.TokenProcessor
 {
-    public class Token_Verify : Processor
+    public class Token_Verify : Processor, IToken_Verify
     {
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 

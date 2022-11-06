@@ -2,11 +2,12 @@
 using System.Security.Cryptography;
 using TimeManager.IdP.Data;
 using TimeManager.IdP.Authentication;
+using TimeManager.IdP.Processors.TokenProcessor;
 using TimeManager.IdP.Data.Token;
 
-namespace TimeManager.IdP.Processors.TokenProcessor
+namespace TimeManager.IdP.Processors.UserProcessor
 {
-    public class User_Login : Processor
+    public class User_Login : Processor, IUser_Login
     {
         public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
         public Response<TokenDTO> Login(UserDTO data)
