@@ -35,8 +35,8 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddScoped<IUserProcessors, UserProcessors>();
-builder.Services.AddScoped<ITokenProcessors, TokenProcessors>();
+builder.Services.AddScoped<IProcessors, Processors>();
+
 
 var app = builder.Build();
 
