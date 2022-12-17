@@ -6,6 +6,6 @@ namespace TimeManager.IdP.Processors.UserProcessor
 {
     public interface IUser_Register
     {
-        public Response<TokenDTO> Execute(UserDTO data);
+        public TokenDTO Execute(UserDTO data);
     }
 }

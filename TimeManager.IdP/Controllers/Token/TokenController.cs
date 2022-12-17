@@ -21,15 +21,17 @@ namespace TimeManager.IdP.Authentication
 
                 if(processor == null) throw new ArgumentNullException(nameof(processor));
 
-                return Ok(processor.Execute(tokenDTO.token));
+                var result = processor.Execute(tokenDTO.token);
+                
+                return Ok(new Response<bool>(result));
             }
             catch(ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<bool>(ex));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<bool>(ex));
             }
         }
     }

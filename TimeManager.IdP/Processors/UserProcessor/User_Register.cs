@@ -10,9 +10,8 @@ namespace TimeManager.IdP.Processors.UserProcessor
     public class User_Register : Processor, IUser_Register
     {
         public User_Register(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<TokenDTO> Execute(UserDTO data)
+        public TokenDTO Execute(UserDTO data)
         {
-            Response<TokenDTO> response;
             try
             {
                 _logger.LogInformation("Register Processor invoked");
@@ -36,16 +35,14 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 user.Token = token;
                 _context.SaveChanges();
 
-                response = new Response<TokenDTO>(new TokenDTO() { token = token, userId = user.Id });
 
                 _logger.LogInformation("Successfully registered user");
-                return response;
+                return new TokenDTO() { token = token, userId = user.Id };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                response = new Response<TokenDTO>(ex, "Whoops something went wrong");
-                return response;
+                throw ex;
             }
         }
 
@@ -67,7 +64,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
     }

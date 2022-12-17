@@ -22,17 +22,19 @@ namespace TimeManager.IdP.Authentication
             try
             {
                 var processor = _processors.user_Register;
-                if (processor == null) throw new ArgumentNullException(nameof(processor));  
+                if (processor == null) throw new ArgumentNullException(nameof(processor));
 
-                return Ok(processor.Execute(request));
+                var token = processor.Execute(request);
+                return Ok(new Response<TokenDTO>(token));
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<TokenDTO>(ex));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<TokenDTO>(ex));
+
             }
         }
 
@@ -45,15 +47,16 @@ namespace TimeManager.IdP.Authentication
                 var processor = _processors.user_Login;
                 if(processor == null) throw new ArgumentNullException(nameof(processor));
 
-                return Ok(processor.Execute(request));
+                var token = processor.Execute(request);
+                return Ok(new Response<TokenDTO>(token));
             }
             catch(ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<TokenDTO>(ex));
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new Response<TokenDTO>(ex));
             }
         }
     }

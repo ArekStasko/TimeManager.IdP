@@ -1,4 +1,4 @@
-﻿using Autofac
+﻿using Autofac;
 using System.Reflection;
 
 namespace TimeManager.IdP.services

@@ -10,9 +10,8 @@ namespace TimeManager.IdP.Processors.UserProcessor
     public class User_Login : Processor, IUser_Login
     {
         public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<TokenDTO> Execute(UserDTO data)
+        public TokenDTO Execute(UserDTO data)
         {
-            Response<TokenDTO> response;
             try
             {
                 var generateToken = new Token_Generate(_context, _logger);
@@ -29,16 +28,14 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 user.Token = token;
                 _context.SaveChanges();
 
-                response = new Response<TokenDTO>(new TokenDTO { token = token, userId = user.Id });
                 _logger.LogInformation("User successfully logged in");
-                return response;
+                return new TokenDTO { token = token, userId = user.Id };
 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                response = new Response<TokenDTO>(ex, "Whoops something went wrong");
-                return response;
+                throw ex;
             }
         }
 

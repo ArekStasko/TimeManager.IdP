@@ -2,7 +2,7 @@
 {
     public interface IResponse<T>
     {
-        public T Data { get; set; }
-        public ApiException Exception { get; set; }
+        public T Data { get; }
+        public ApiException Exception { get; }
     }
 }
