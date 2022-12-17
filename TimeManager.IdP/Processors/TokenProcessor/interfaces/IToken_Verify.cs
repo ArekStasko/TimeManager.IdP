@@ -2,6 +2,6 @@
 {
     public interface IToken_Verify
     {
-        public bool VerifyToken(string token);
+        public bool Execute(string token);
     }
 }

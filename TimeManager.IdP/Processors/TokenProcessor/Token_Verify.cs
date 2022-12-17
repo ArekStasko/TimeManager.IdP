@@ -11,7 +11,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 
  
-        public bool VerifyToken(string token)
+        public bool Execute(string token)
         {
             try
             {

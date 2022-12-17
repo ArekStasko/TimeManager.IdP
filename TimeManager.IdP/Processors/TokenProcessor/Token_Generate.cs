@@ -11,7 +11,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
     {
         public Token_Generate(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 
-        public string GenerateToken(User user)
+        public string Execute(User user)
         {
             try
             {

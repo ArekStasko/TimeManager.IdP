@@ -12,21 +12,49 @@ namespace TimeManager.IdP.Authentication
     [ApiController]
     public class AuthController : ControllerBase, IAuthController
     {
-        private readonly IUserProcessors _processors;
-        public AuthController(IUserProcessors processors) => _processors = processors;
+        private readonly IProcessors _processors;
+        public AuthController(IProcessors processors) => _processors = processors;
 
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<Response<TokenDTO>>> Register(UserDTO request)
         {
-            return Ok(_processors.Register(request));
+            try
+            {
+                var processor = _processors.user_Register;
+                if (processor == null) throw new ArgumentNullException(nameof(processor));  
+
+                return Ok(processor.Execute(request));
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<Response<TokenDTO>>> Login(UserDTO request)
         {
-            return Ok(_processors.Login(request));
+            try
+            {
+                var processor = _processors.user_Login;
+                if(processor == null) throw new ArgumentNullException(nameof(processor));
+
+                return Ok(processor.Execute(request));
+            }
+            catch(ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
     public class User_Register : Processor, IUser_Register
     {
         public User_Register(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<TokenDTO> Register(UserDTO data)
+        public Response<TokenDTO> Execute(UserDTO data)
         {
             Response<TokenDTO> response;
             try
@@ -30,7 +30,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
 
                 var generateToken = new Token_Generate(_context, _logger);
 
-                string token = generateToken.GenerateToken(user);
+                string token = generateToken.Execute(user);
                 _logger.LogInformation("Token is created");
 
                 user.Token = token;

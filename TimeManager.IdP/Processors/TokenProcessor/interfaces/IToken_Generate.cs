@@ -4,6 +4,6 @@ namespace TimeManager.IdP.Processors.TokenProcessor
 {
     public interface IToken_Generate
     {
-        public string GenerateToken(User user);
+        public string Execute(User user);
     }
 }

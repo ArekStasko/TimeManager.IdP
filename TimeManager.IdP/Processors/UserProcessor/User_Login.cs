@@ -10,7 +10,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
     public class User_Login : Processor, IUser_Login
     {
         public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public Response<TokenDTO> Login(UserDTO data)
+        public Response<TokenDTO> Execute(UserDTO data)
         {
             Response<TokenDTO> response;
             try
@@ -24,7 +24,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 if (!VerifyPasswordHash(data.Password, user)) throw new Exception("Wrong Password or Username");    
 
 
-                string token = generateToken.GenerateToken(user);
+                string token = generateToken.Execute(user);
 
                 user.Token = token;
                 _context.SaveChanges();
