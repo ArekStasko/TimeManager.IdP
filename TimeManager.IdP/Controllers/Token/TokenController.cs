@@ -13,26 +13,20 @@ namespace TimeManager.IdP.Authentication
         public TokenController(IProcessors processors) => _processors = processors;
 
         [HttpPost("verifyToken")]
-        public async Task<ActionResult<Response<bool>>> VerifyToken(TokenDTO tokenDTO)
+        public async Task<IActionResult> VerifyToken(TokenDTO tokenDTO)
         {
-            try
-            {
-                var processor = _processors.token_Verify;
+            var processor = _processors.token_Verify;
+            if(processor == null) return BadRequest(new ArgumentNullException(nameof(processor)));
 
-                if(processor == null) throw new ArgumentNullException(nameof(processor));
+            var result = await processor.Execute(tokenDTO.token);
 
-                var result = processor.Execute(tokenDTO.token);
-                
-                return Ok(new Response<bool>(result));
-            }
-            catch(ArgumentNullException ex)
+            return result.Match<IActionResult>(success =>
             {
-                return BadRequest(new Response<bool>(ex));
-            }
-            catch (Exception ex)
+                return CreatedAtAction("Post", success);
+            }, exception =>
             {
-                return BadRequest(new Response<bool>(ex));
-            }
+                return BadRequest(exception);
+            });
         }
     }
 }

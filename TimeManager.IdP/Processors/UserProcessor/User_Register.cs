@@ -1,16 +1,16 @@
-﻿using TimeManager.IdP.Data.Response;
-using TimeManager.IdP.Data;
+﻿using TimeManager.IdP.Data;
 using System.Security.Cryptography;
 using TimeManager.IdP.Authentication;
 using TimeManager.IdP.Data.Token;
 using TimeManager.IdP.Processors.TokenProcessor;
+using LanguageExt.Common;
 
 namespace TimeManager.IdP.Processors.UserProcessor
 {
     public class User_Register : Processor, IUser_Register
     {
         public User_Register(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
-        public TokenDTO Execute(UserDTO data)
+        public async Task<Result<TokenDTO>> Execute(UserDTO data)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
 
                 if(_context.Users.Any(u => u.UserName == data.UserName))
                 {
-                    throw new Exception("User with this username already exists");
+                    return new Result<TokenDTO>(new Exception("User with this username already exists"));
                 }
                 _logger.LogInformation($"Username: {data.UserName}  Is free");
 
@@ -37,12 +37,13 @@ namespace TimeManager.IdP.Processors.UserProcessor
 
 
                 _logger.LogInformation("Successfully registered user");
-                return new TokenDTO() { token = token, userId = user.Id };
+                var tokenDTO = new TokenDTO() { token = token, userId = user.Id };
+                return new Result<TokenDTO>(tokenDTO);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw ex;
+                return new Result<TokenDTO>(ex);
             }
         }
 

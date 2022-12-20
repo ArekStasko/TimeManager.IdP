@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data;
-using TimeManager.IdP.Processors.UserProcessor;
 using Microsoft.AspNetCore.Authorization;
-using TimeManager.IdP.Data.Token;
 using TimeManager.IdP.services;
 
 namespace TimeManager.IdP.Authentication
@@ -17,47 +14,38 @@ namespace TimeManager.IdP.Authentication
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<Response<TokenDTO>>> Register(UserDTO request)
+        public async Task<IActionResult> Register(UserDTO request)
         {
-            try
-            {
-                var processor = _processors.user_Register;
-                if (processor == null) throw new ArgumentNullException(nameof(processor));
+            var processor = _processors.user_Register;
+            if (processor == null) return BadRequest(new ArgumentNullException(nameof(processor)));
 
-                var token = processor.Execute(request);
-                return Ok(new Response<TokenDTO>(token));
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(new Response<TokenDTO>(ex));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new Response<TokenDTO>(ex));
+            var result = await processor.Execute(request);
 
-            }
+            return result.Match<IActionResult>(token =>
+            {
+                return CreatedAtAction("Post", token);
+            }, exception =>
+            {
+                return BadRequest(exception);
+            });
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<Response<TokenDTO>>> Login(UserDTO request)
+        public async Task<IActionResult> Login(UserDTO request)
         {
-            try
-            {
-                var processor = _processors.user_Login;
-                if(processor == null) throw new ArgumentNullException(nameof(processor));
+            var processor = _processors.user_Login;
+            if(processor == null) return BadRequest(new ArgumentNullException(nameof(processor)));
 
-                var token = processor.Execute(request);
-                return Ok(new Response<TokenDTO>(token));
-            }
-            catch(ArgumentNullException ex)
+            var result = await processor.Execute(request);
+
+            return result.Match<IActionResult>(token =>
             {
-                return BadRequest(new Response<TokenDTO>(ex));
-            }
-            catch(Exception ex)
+                return CreatedAtAction("Post", token);
+            }, exception =>
             {
-                return BadRequest(new Response<TokenDTO>(ex));
-            }
+                return BadRequest(exception);
+            });
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace TimeManager.IdP.Processors.TokenProcessor
+﻿using LanguageExt.Common;
+
+namespace TimeManager.IdP.Processors.TokenProcessor
 {
     public interface IToken_Verify
     {
-        public bool Execute(string token);
+        public Task<Result<bool>> Execute(string token);
     }
 }

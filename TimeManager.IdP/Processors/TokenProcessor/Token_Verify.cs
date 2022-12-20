@@ -3,6 +3,7 @@ using TimeManager.IdP.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using LanguageExt.Common;
 
 namespace TimeManager.IdP.Processors.TokenProcessor
 {
@@ -11,7 +12,7 @@ namespace TimeManager.IdP.Processors.TokenProcessor
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 
  
-        public bool Execute(string token)
+        public async Task<Result<bool>> Execute(string token)
         {
             try
             {
@@ -35,15 +36,15 @@ namespace TimeManager.IdP.Processors.TokenProcessor
                 if (!user.Any())
                 {
                     _logger.LogError("Verify Token failed");
-                    throw new Exception("There is no user for this token");
+                    return new Result<bool>(new ArgumentNullException("There is no user"));
                 }
 
-                return true;
+                return new Result<bool>(true);
             } 
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return false;
+                return new Result<bool>(ex);
             }
             
         }                                                     
