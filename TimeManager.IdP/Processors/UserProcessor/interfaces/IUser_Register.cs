@@ -1,6 +1,5 @@
 ﻿using LanguageExt.Common;
 using TimeManager.IdP.Data;
-using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data.Token;
 
 namespace TimeManager.IdP.Processors.UserProcessor

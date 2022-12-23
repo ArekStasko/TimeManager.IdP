@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TimeManager.IdP.Data.Response;
 using TimeManager.IdP.Data.Token;
 using TimeManager.IdP.services;
 
