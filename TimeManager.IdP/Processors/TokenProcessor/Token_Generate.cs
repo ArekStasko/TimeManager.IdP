@@ -7,9 +7,9 @@ using System.Text;
 
 namespace TimeManager.IdP.Processors.TokenProcessor
 {
-    public class Token_Generate : Processor, IToken_Generate
+    public class Token_Generate : Processor<AuthController>, IToken_Generate
     {
-        public Token_Generate(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
+        public Token_Generate(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
 
         public string Execute(User user)
         {

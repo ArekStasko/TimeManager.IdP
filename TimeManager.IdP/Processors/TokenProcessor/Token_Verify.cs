@@ -7,7 +7,7 @@ using LanguageExt.Common;
 
 namespace TimeManager.IdP.Processors.TokenProcessor
 {
-    public class Token_Verify : Processor, IToken_Verify
+    public class Token_Verify : Processor<TokenController>, IToken_Verify
     {
         public Token_Verify(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
 

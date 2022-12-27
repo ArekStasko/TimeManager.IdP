@@ -7,9 +7,9 @@ using LanguageExt.Common;
 
 namespace TimeManager.IdP.Processors.UserProcessor
 {
-    public class User_Login : Processor, IUser_Login
+    public class User_Login : Processor<AuthController>, IUser_Login
     {
-        public User_Login(DataContext context, ILogger<TokenController> logger) : base(context, logger) { }
+        public User_Login(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
         public async Task<Result<TokenDTO>> Execute(UserDTO data)
         {
             try

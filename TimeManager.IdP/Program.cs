@@ -37,6 +37,10 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddScoped<IProcessors, Processors>();
 
+builder.Services.AddMvc(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+});
 
 var app = builder.Build();
 

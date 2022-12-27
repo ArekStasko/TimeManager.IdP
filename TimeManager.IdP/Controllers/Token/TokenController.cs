@@ -21,7 +21,7 @@ namespace TimeManager.IdP.Authentication
 
             return result.Match<IActionResult>(success =>
             {
-                return CreatedAtAction("Post", success);
+                return CreatedAtAction(nameof(VerifyToken), success);
             }, exception =>
             {
                 return BadRequest(exception);

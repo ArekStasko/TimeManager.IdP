@@ -23,7 +23,7 @@ namespace TimeManager.IdP.Authentication
 
             return result.Match<IActionResult>(token =>
             {
-                return CreatedAtAction("Post", token);
+                return CreatedAtAction(nameof(Register), token);
             }, exception =>
             {
                 return BadRequest(exception);
@@ -41,7 +41,7 @@ namespace TimeManager.IdP.Authentication
 
             return result.Match<IActionResult>(token =>
             {
-                return CreatedAtAction("Post", token);
+                return CreatedAtAction(nameof(Login), token);
             }, exception =>
             {
                 return BadRequest(exception);
