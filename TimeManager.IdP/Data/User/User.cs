@@ -4,6 +4,7 @@ namespace TimeManager.IdP.Data
 {
     public class User : IUser
     {
+        public User() {}
         public User(string userName, byte[] passwordHash, byte[] passwordSalt)
         {
             UserName = userName;

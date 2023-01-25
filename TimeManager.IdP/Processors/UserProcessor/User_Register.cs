@@ -4,12 +4,13 @@ using TimeManager.IdP.Authentication;
 using TimeManager.IdP.Data.Token;
 using TimeManager.IdP.Processors.TokenProcessor;
 using LanguageExt.Common;
+using TimeManager.IdP.services.MessageQueuer;
 
 namespace TimeManager.IdP.Processors.UserProcessor
 {
     public class User_Register : Processor<AuthController>, IUser_Register
     {
-        public User_Register(DataContext context, ILogger<AuthController> logger) : base(context, logger) { }
+        public User_Register(DataContext context, ILogger<AuthController> logger, IMQManager mqManager) : base(context, logger, mqManager) { }
         public async Task<Result<TokenDTO>> Execute(UserDTO data)
         {
             try
@@ -33,6 +34,9 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 _logger.LogInformation("Token is created");
 
                 user.Token = token;
+                
+                //TODO write call to processing engine to save user data 
+                
                 _context.SaveChanges();
 
 

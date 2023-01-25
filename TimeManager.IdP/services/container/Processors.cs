@@ -3,12 +3,13 @@ using TimeManager.IdP.Processors.UserProcessor;
 using Autofac;
 using TimeManager.IdP.Authentication;
 using TimeManager.IdP.Data;
+using TimeManager.IdP.services.MessageQueuer;
 
 namespace TimeManager.IdP.services
 {
     public class Processors : IProcessors
     {
-        public Processors(DataContext context, ILogger<AuthController> authLogger, ILogger<TokenController> tokenLogger) => _container = ContainerFactory.CreateProcessorsContainer(context, authLogger, tokenLogger);
+        public Processors(DataContext context, ILogger<AuthController> authLogger, ILogger<TokenController> tokenLogger, IMQManager mqManager) => _container = ContainerFactory.CreateProcessorsContainer(context, authLogger, tokenLogger, mqManager);
 
         private IContainer _container { get; }
 

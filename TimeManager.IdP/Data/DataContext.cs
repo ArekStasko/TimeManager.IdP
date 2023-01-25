@@ -6,8 +6,9 @@ namespace TimeManager.IdP.Data
 {
     public class DataContext : DbContext, IDataContext
     {
+        public DataContext() { }
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-        public DbSet<TokenKey> TokenKey { get; set; }
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<TokenKey> TokenKey { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }
