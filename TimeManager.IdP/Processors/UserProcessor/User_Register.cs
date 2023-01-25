@@ -35,7 +35,19 @@ namespace TimeManager.IdP.Processors.UserProcessor
 
                 user.Token = token;
                 
-                //TODO write call to processing engine to save user data 
+                bool succ = _mqManager.Publish(
+                    user,
+                    "entity.user.post",
+                    "direct",
+                    "user_Post"
+                );
+
+                if (!succ)
+                {
+                    _context.Users.Remove(user);
+                    _context.SaveChanges();
+                    return new Result<TokenDTO>(new Exception("Some Processing Engine Error was thrown"));
+                }
                 
                 _context.SaveChanges();
 
