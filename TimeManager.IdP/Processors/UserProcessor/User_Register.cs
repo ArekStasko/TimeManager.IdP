@@ -22,7 +22,6 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 {
                     return new Result<TokenDTO>(new Exception("User with this username already exists"));
                 }
-                _logger.LogInformation($"Username: {data.UserName}  Is free");
 
                 User user = new User(data.UserName, hash.Item1, hash.Item2);
                 _context.Users.Add(user);
@@ -34,14 +33,16 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 _logger.LogInformation("Token is created");
 
                 user.Token = token;
-                
+                _context.SaveChanges();
+
+                user = _context.Users.Single(u => u.UserName == user.UserName);
                 bool succ = _mqManager.Publish(
                     user,
                     "entity.user.post",
                     "direct",
                     "user_Post"
                 );
-
+                _logger.LogInformation("Received message");
                 if (!succ)
                 {
                     _context.Users.Remove(user);
@@ -49,7 +50,6 @@ namespace TimeManager.IdP.Processors.UserProcessor
                     return new Result<TokenDTO>(new Exception("Some Processing Engine Error was thrown"));
                 }
                 
-                _context.SaveChanges();
 
 
                 _logger.LogInformation("Successfully registered user");
