@@ -18,39 +18,29 @@ namespace TimeManager.IdP.Processors.UserProcessor
                 _logger.LogInformation("Register Processor invoked");
                 Tuple<byte[], byte[]> hash = CreatePasswordHash(data.Password);
 
-                if(_context.Users.Any(u => u.UserName == data.UserName))
-                {
-                    return new Result<TokenDTO>(new Exception("User with this username already exists"));
-                }
+                if(_context.Users.Any(u => u.UserName == data.UserName)) return new Result<TokenDTO>(new Exception("User with this username already exists"));
 
                 User user = new User(data.UserName, hash.Item1, hash.Item2);
+                user.Id = Guid.NewGuid();
                 _context.Users.Add(user);
                 
-
                 var generateToken = new Token_Generate(_context, _logger);
 
                 string token = generateToken.Execute(user);
                 _logger.LogInformation("Token is created");
 
                 user.Token = token;
-                _context.SaveChanges();
 
-                user = _context.Users.Single(u => u.UserName == user.UserName);
                 bool succ = _mqManager.Publish(
                     user,
                     "entity.user.post",
                     "direct",
                     "user_Post"
                 );
-                _logger.LogInformation("Received message");
-                if (!succ)
-                {
-                    _context.Users.Remove(user);
-                    _context.SaveChanges();
-                    return new Result<TokenDTO>(new Exception("Some Processing Engine Error was thrown"));
-                }
                 
+                if (!succ) return new Result<TokenDTO>(new Exception("Some Processing Engine Error was thrown"));
 
+                _context.SaveChanges();
 
                 _logger.LogInformation("Successfully registered user");
                 var tokenDTO = new TokenDTO() { token = token, userId = user.Id };
