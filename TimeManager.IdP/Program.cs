@@ -8,7 +8,14 @@ using System.Text;
 using TimeManager.IdP.services;
 using TimeManager.IdP.services.MessageQueuer;
 
+const string AllowSpecifiOrigin = "AllowSpecifiOrigin";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowSpecifiOrigin, policy => policy.WithOrigins("http://localhost:3000"));
+});
 
 // Add services to the container.
 
@@ -22,6 +29,8 @@ var logger = new LoggerConfiguration()
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,6 +66,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseCors(AllowSpecifiOrigin);
 
 app.UseAuthorization();
 
