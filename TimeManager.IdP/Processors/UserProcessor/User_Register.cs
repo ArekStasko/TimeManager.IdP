@@ -15,7 +15,7 @@ namespace TimeManager.IdP.Processors.UserProcessor
         {
             try
             {
-                _logger.LogInformation("Register Processor invoked");
+                _logger.LogInformation($"Register Processor invoked: {data.UserName} ; {data.Password}");
                 Tuple<byte[], byte[]> hash = CreatePasswordHash(data.Password);
 
                 if(_context.Users.Any(u => u.UserName == data.UserName)) return new Result<TokenDTO>(new Exception("User with this username already exists"));
